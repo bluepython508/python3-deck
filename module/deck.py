@@ -85,3 +85,5 @@ class PartialDeck(Deck):
 	def shuffle(self):
 		self.deck = copy.copy(self.cards)
 		random.shuffle(self.deck)
+		del(self.cards)
+		self.cards = []
