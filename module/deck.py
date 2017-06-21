@@ -64,7 +64,7 @@ class Deck():
 				self.shuffle()
 			else:
 				return None
-		return deck.pop()
+		return self.deck.pop()
 	def drawhand(self, no, reshuffle=False):
 		hand = []
 		for x in range(no):
@@ -74,12 +74,12 @@ class Deck():
 
 class PartialDeck(Deck):
 	def __init__(self, cards):
-		self.cards = cards
-		self.deck = copy.copy(self.cards)
+		self.deck = copy.copy(cards)
+		self.cards = []
 	def add_cards(self, cards):
 		self.cards = cards + self.cards
 	def __bool__(self):
-		return (len(self.cards) > 0)
+		return (len(self.cards) > 0 or len(self.deck) > 0)
 	def __int__(self):
 		return len(self.cards)
 	def shuffle(self):
