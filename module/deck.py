@@ -14,7 +14,6 @@ values = tuple(values)
 values_ace_low = tuple(values_ace_low)
 
 
-
 class Card():
 	def __init__(self, value, suit, valueset=values):
 		self.values = valueset
@@ -40,3 +39,49 @@ class Card():
 	def __ne__(self, other):
 		return (int(self) != int(other))
 
+
+class Deck():
+	def __init__(self, ace_high):
+		if ace_high:
+			self.values = values
+		else:
+			self.values = values_ace_low
+		self.cards = []
+		for suit in suits:
+			for value in values:
+				self.cards.append(Card(value, suit, self.values))
+		self.deck = copy.copy(self.cards)
+		random.shuffle(self.deck)
+	def shuffle(self, dont_shuffle_in):
+		self.deck = copy.copy(self.cards)
+		if dont_shuffle_in:
+			for card in dont_shuffle_in:
+				del(self.deck[self.deck.index(card)])
+		random.shuffle(self.deck)
+	def draw(self, reshuffle=False):
+		if len(self.deck) == 0:
+			if reshuffle:
+				self.shuffle()
+			else:
+				return None
+		return deck.pop()
+	def drawhand(self, no, reshuffle=False):
+		hand = []
+		for x in range(no):
+			hand.append(self.draw(reshuffle))
+		return hand
+
+
+class PartialDeck(Deck):
+	def __init__(self, cards):
+		self.cards = cards
+		self.deck = copy.copy(self.cards)
+	def add_cards(self, cards):
+		self.cards = cards + self.cards
+	def __bool__(self):
+		return (len(self.cards) > 0)
+	def __int__(self):
+		return len(self.cards)
+	def shuffle(self):
+		self.deck = copy.copy(self.cards)
+		random.shuffle(self.deck)
